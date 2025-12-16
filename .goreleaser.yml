@@ -1,8 +1,6 @@
 # GoReleaser Config for Terraform Provider
 # Visit https://goreleaser.com for documentation
 
-version: 2
-
 before:
   hooks:
     - go mod tidy
