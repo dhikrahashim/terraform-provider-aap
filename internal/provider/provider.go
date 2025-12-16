@@ -123,6 +123,7 @@ func (p *AapProvider) Resources(ctx context.Context) []func() resource.Resource 
 		NewCredentialScmResource,
 		NewCredentialTypeResource,
 		NewInventorySourceResource,
+		NewInventoryScriptResource,
 	}
 }
 

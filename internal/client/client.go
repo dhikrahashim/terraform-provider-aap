@@ -442,3 +442,48 @@ func (c *Client) DeleteCredentialType(id int) error {
 	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/credential_types/%d/", id), nil)
 	return err
 }
+
+// ==================== INVENTORY SCRIPT ====================
+
+type InventoryScript struct {
+	ID           int    `json:"id,omitempty"`
+	Name         string `json:"name"`
+	Description  string `json:"description,omitempty"`
+	Organization int    `json:"organization"`
+	Script       string `json:"script"`
+}
+
+func (c *Client) GetInventoryScript(id int) (*InventoryScript, error) {
+	resp, err := c.doRequest("GET", fmt.Sprintf("/api/controller/v2/inventory_scripts/%d/", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var is InventoryScript
+	err = json.Unmarshal(resp, &is)
+	return &is, err
+}
+
+func (c *Client) CreateInventoryScript(is *InventoryScript) (*InventoryScript, error) {
+	resp, err := c.doRequest("POST", "/api/controller/v2/inventory_scripts/", is)
+	if err != nil {
+		return nil, err
+	}
+	var newIS InventoryScript
+	err = json.Unmarshal(resp, &newIS)
+	return &newIS, err
+}
+
+func (c *Client) UpdateInventoryScript(is *InventoryScript) (*InventoryScript, error) {
+	resp, err := c.doRequest("PATCH", fmt.Sprintf("/api/controller/v2/inventory_scripts/%d/", is.ID), is)
+	if err != nil {
+		return nil, err
+	}
+	var updated InventoryScript
+	err = json.Unmarshal(resp, &updated)
+	return &updated, err
+}
+
+func (c *Client) DeleteInventoryScript(id int) error {
+	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/inventory_scripts/%d/", id), nil)
+	return err
+}
