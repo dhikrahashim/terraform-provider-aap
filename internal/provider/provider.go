@@ -118,6 +118,11 @@ func (p *AapProvider) Resources(ctx context.Context) []func() resource.Resource 
 		NewOrganizationResource,
 		NewInventoryResource,
 		NewJobTemplateResource,
+		NewProjectResource,
+		NewCredentialMachineResource,
+		NewCredentialScmResource,
+		NewCredentialTypeResource,
+		NewInventorySourceResource,
 	}
 }
 

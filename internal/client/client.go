@@ -233,3 +233,212 @@ func (c *Client) DeleteJobTemplate(id int) error {
 	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/job_templates/%d/", id), nil)
 	return err
 }
+
+// ==================== PROJECT ====================
+
+type Project struct {
+	ID                    int    `json:"id,omitempty"`
+	Name                  string `json:"name"`
+	Description           string `json:"description,omitempty"`
+	Organization          int    `json:"organization"`
+	ScmType               string `json:"scm_type"`
+	ScmUrl                string `json:"scm_url,omitempty"`
+	ScmBranch             string `json:"scm_branch,omitempty"`
+	ScmCredential         int    `json:"credential,omitempty"`
+	ScmClean              bool   `json:"scm_clean,omitempty"`
+	ScmDeleteOnUpdate     bool   `json:"scm_delete_on_update,omitempty"`
+	ScmUpdateOnLaunch     bool   `json:"scm_update_on_launch,omitempty"`
+	ScmUpdateCacheTimeout int    `json:"scm_update_cache_timeout,omitempty"`
+	LocalPath             string `json:"local_path,omitempty"`
+}
+
+func (c *Client) GetProject(id int) (*Project, error) {
+	resp, err := c.doRequest("GET", fmt.Sprintf("/api/controller/v2/projects/%d/", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var p Project
+	err = json.Unmarshal(resp, &p)
+	return &p, err
+}
+
+func (c *Client) CreateProject(p *Project) (*Project, error) {
+	resp, err := c.doRequest("POST", "/api/controller/v2/projects/", p)
+	if err != nil {
+		return nil, err
+	}
+	var newP Project
+	err = json.Unmarshal(resp, &newP)
+	return &newP, err
+}
+
+func (c *Client) UpdateProject(p *Project) (*Project, error) {
+	resp, err := c.doRequest("PATCH", fmt.Sprintf("/api/controller/v2/projects/%d/", p.ID), p)
+	if err != nil {
+		return nil, err
+	}
+	var updated Project
+	err = json.Unmarshal(resp, &updated)
+	return &updated, err
+}
+
+func (c *Client) DeleteProject(id int) error {
+	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/projects/%d/", id), nil)
+	return err
+}
+
+// ==================== CREDENTIAL ====================
+
+type CredentialInputs struct {
+	Username         string `json:"username,omitempty"`
+	Password         string `json:"password,omitempty"`
+	SSHKeyData       string `json:"ssh_key_data,omitempty"`
+	SSHPublicKeyData string `json:"ssh_public_key_data,omitempty"`
+	SSHKeyUnlock     string `json:"ssh_key_unlock,omitempty"`
+	BecomeMethod     string `json:"become_method,omitempty"`
+	BecomeUsername   string `json:"become_username,omitempty"`
+	BecomePassword   string `json:"become_password,omitempty"`
+}
+
+type Credential struct {
+	ID             int              `json:"id,omitempty"`
+	Name           string           `json:"name"`
+	Description    string           `json:"description,omitempty"`
+	Organization   int              `json:"organization"`
+	CredentialType int              `json:"credential_type"`
+	Inputs         CredentialInputs `json:"inputs,omitempty"`
+}
+
+func (c *Client) GetCredential(id int) (*Credential, error) {
+	resp, err := c.doRequest("GET", fmt.Sprintf("/api/controller/v2/credentials/%d/", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var cred Credential
+	err = json.Unmarshal(resp, &cred)
+	return &cred, err
+}
+
+func (c *Client) CreateCredential(cred *Credential) (*Credential, error) {
+	resp, err := c.doRequest("POST", "/api/controller/v2/credentials/", cred)
+	if err != nil {
+		return nil, err
+	}
+	var newCred Credential
+	err = json.Unmarshal(resp, &newCred)
+	return &newCred, err
+}
+
+func (c *Client) UpdateCredential(cred *Credential) (*Credential, error) {
+	resp, err := c.doRequest("PATCH", fmt.Sprintf("/api/controller/v2/credentials/%d/", cred.ID), cred)
+	if err != nil {
+		return nil, err
+	}
+	var updated Credential
+	err = json.Unmarshal(resp, &updated)
+	return &updated, err
+}
+
+func (c *Client) DeleteCredential(id int) error {
+	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/credentials/%d/", id), nil)
+	return err
+}
+
+// ==================== INVENTORY SOURCE ====================
+
+type InventorySource struct {
+	ID                 int    `json:"id,omitempty"`
+	Name               string `json:"name"`
+	Description        string `json:"description,omitempty"`
+	Inventory          int    `json:"inventory"`
+	Source             string `json:"source"`
+	SourcePath         string `json:"source_path,omitempty"`
+	SourceVars         string `json:"source_vars,omitempty"`
+	Credential         int    `json:"credential,omitempty"`
+	SourceProject      int    `json:"source_project,omitempty"`
+	UpdateOnLaunch     bool   `json:"update_on_launch,omitempty"`
+	UpdateCacheTimeout int    `json:"update_cache_timeout,omitempty"`
+	Overwrite          bool   `json:"overwrite,omitempty"`
+	OverwriteVars      bool   `json:"overwrite_vars,omitempty"`
+}
+
+func (c *Client) GetInventorySource(id int) (*InventorySource, error) {
+	resp, err := c.doRequest("GET", fmt.Sprintf("/api/controller/v2/inventory_sources/%d/", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var is InventorySource
+	err = json.Unmarshal(resp, &is)
+	return &is, err
+}
+
+func (c *Client) CreateInventorySource(is *InventorySource) (*InventorySource, error) {
+	resp, err := c.doRequest("POST", "/api/controller/v2/inventory_sources/", is)
+	if err != nil {
+		return nil, err
+	}
+	var newIS InventorySource
+	err = json.Unmarshal(resp, &newIS)
+	return &newIS, err
+}
+
+func (c *Client) UpdateInventorySource(is *InventorySource) (*InventorySource, error) {
+	resp, err := c.doRequest("PATCH", fmt.Sprintf("/api/controller/v2/inventory_sources/%d/", is.ID), is)
+	if err != nil {
+		return nil, err
+	}
+	var updated InventorySource
+	err = json.Unmarshal(resp, &updated)
+	return &updated, err
+}
+
+func (c *Client) DeleteInventorySource(id int) error {
+	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/inventory_sources/%d/", id), nil)
+	return err
+}
+
+// ==================== CREDENTIAL TYPE ====================
+
+type CredentialType struct {
+	ID          int    `json:"id,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Kind        string `json:"kind"`
+	Inputs      string `json:"inputs,omitempty"`
+	Injectors   string `json:"injectors,omitempty"`
+}
+
+func (c *Client) GetCredentialType(id int) (*CredentialType, error) {
+	resp, err := c.doRequest("GET", fmt.Sprintf("/api/controller/v2/credential_types/%d/", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var ct CredentialType
+	err = json.Unmarshal(resp, &ct)
+	return &ct, err
+}
+
+func (c *Client) CreateCredentialType(ct *CredentialType) (*CredentialType, error) {
+	resp, err := c.doRequest("POST", "/api/controller/v2/credential_types/", ct)
+	if err != nil {
+		return nil, err
+	}
+	var newCT CredentialType
+	err = json.Unmarshal(resp, &newCT)
+	return &newCT, err
+}
+
+func (c *Client) UpdateCredentialType(ct *CredentialType) (*CredentialType, error) {
+	resp, err := c.doRequest("PATCH", fmt.Sprintf("/api/controller/v2/credential_types/%d/", ct.ID), ct)
+	if err != nil {
+		return nil, err
+	}
+	var updated CredentialType
+	err = json.Unmarshal(resp, &updated)
+	return &updated, err
+}
+
+func (c *Client) DeleteCredentialType(id int) error {
+	_, err := c.doRequest("DELETE", fmt.Sprintf("/api/controller/v2/credential_types/%d/", id), nil)
+	return err
+}
